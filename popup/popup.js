@@ -7,10 +7,10 @@ const OOLET_COLLECT_URL = "https://oolet-shoot.web.app/collect"
 
 // popup.html load listener
 window.addEventListener('load', function () {
-	btnBoxEle = document.querySelector("#btnBox")
+	getAllTabsBtn = document.querySelector("#btnBox")
 	listShootEle = document.querySelector("#listShoot")
 
-	btnBoxEle.addEventListener('click', (e) => {
+	getAllTabsBtn.addEventListener('click', (e) => {
 		toggleCreateBox({});
 	})
 	listShootEle.addEventListener('click', (e) => {
@@ -18,17 +18,16 @@ window.addEventListener('load', function () {
 	})
 })
 
-document.addEventListener("DOMContentLoaded", () => {
-	toggleCreateBox({ active: 1 });
-})
+// document.addEventListener("DOMContentLoaded", () => {
+// 	toggleCreateBox({ active: 1 });
+// })
 
 // Handler to background
-function toggleCreateBox({ active = null }) {
+function toggleCreateBox() {
 	chrome.runtime.sendMessage({
-		type: "SEND_CREATEBOX_REQ",
-		active: active
+		type: "GET_ALL_TABS_REQ"
 	}, (response) => {
-		console.log("BG Reponse for creating box");
+		console.log("BG Reponse for GET_ALL_TABS_REQ");
 	});
 }
 

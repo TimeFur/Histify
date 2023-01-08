@@ -16,19 +16,26 @@
 <body>
     <div class="container">
         <h1 class="titleStyle">
-            H
-            i
-            s
-            i
-            f
-            y
+            Hisify
         </h1>
         <div class="control-wrapper">
             <div class="btn-control-wrapper">
-                <input type="button" id="btnBox" class="boxStyle" name="box" value="Toggle Box">
-                <input type="button" id="listShoot" class="listShootStyle" name="box" value="List shoot">
-                <input type="button" id="collectId" class="CollectStyle" name="box" value="Collect">
+                <input type="button" id="histBtn" class="histBtnStyle" name="box" value="Histo">
+                <input type="button" id="donationBtn" class="donationBtnStyle" name="box" value="Donation">
             </div>
+            <div class="item-panel-wrapper">
+                <div class="item-style">READING</div>
+                <div class="item-style">WRITE DOC</div>
+                <div class="item-style">NONE</div>
+                <div class="item-style">READING</div>
+                <div class="item-style">WRITE List </div>
+            </div>
+            <form class="formStyle">
+                <label for="newItem">New Item:</label>
+                <input type="text" name="newItem" id="new-item"></input>
+                <input class="submitStyle" type="submit" value="Add">
+            </form>
+
         </div>
     </div>
     <script src="popup.js"></script>

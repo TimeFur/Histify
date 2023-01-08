@@ -14,7 +14,10 @@ const KEY_CODE_TOGGLEBOX = 84
  ***********************************************************************************/
 window.addEventListener('load', function (e) {
 	console.log("Hisify Load")
+	init()
+})
 
+const init = () => {
 	//create classify element
 	classifyWrapper = document.createElement('div')
 	selectContent = document.createTextNode("Select classify")
@@ -23,14 +26,17 @@ window.addEventListener('load', function (e) {
 	classifyWrapper.style.position = "absolute"
 	classifyWrapper.style.top = "1rem"
 	classifyWrapper.style.right = "1rem"
-	classifyWrapper.style.zIndex = "999"
+	classifyWrapper.style.zIndex = "99999"
 
 	document = document.querySelector("body")
 	document.body.appendChild(classifyWrapper)
+
 	console.log(document)
 
-})
-
+	setTimeout(() => {
+		// classifyWrapper.style.visibility = "hidden";
+	}, 1000);
+}
 /***********************************************************************************
  * 				Get message from website
  * 		- runtime onMessage listener

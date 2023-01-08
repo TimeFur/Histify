@@ -96,7 +96,7 @@
 
 /* button style */
 
-.boxStyle, .listShootStyle, .CollectStyle {
+.histBtnStyle, .donationBtnStyle, .CollectStyle {
     border-radius: 1rem;
     border: 10px;
     padding: 5px;
@@ -105,14 +105,50 @@
     transition: 0.2s ease-out;
 }
 
-.boxStyle:hover {
+.histBtnStyle:hover {
     background: lightpink;
 }
 
-.listShootStyle:hover {
+.donationBtnStyle:hover {
     background: lightpink;
 }
 
 .CollectStyle:hover {
     background: lightpink;
+}
+
+/*  item panel wrapper grid*/
+.item-panel-wrapper{
+    display: grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:2px;
+}
+.item-style{
+    display: flex;
+    width:100%;
+    height:3rem;
+    justify-content: center;
+    align-items: center;
+    background:rgb(241, 176, 176);
+}
+/* form style */
+.formStyle{
+    position: relative;
+    padding: 5px;
+    background:rgb(249, 204, 204);
+}
+
+.formStyle #new-item{
+    width: 60%;
+}
+.submitStyle{
+    background:rgb(211, 245, 237);
+    padding: 3px;
+    border:2px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px gray;
+    cursor: pointer;
+}
+.submitStyle:hover{
+    background:rgb(141, 243, 150);
 }
