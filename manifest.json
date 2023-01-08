@@ -1,0 +1,47 @@
+{
+	"name": "Hisify",
+	"description": "Classify your site and record processing time, listing all of them for you to review",
+	"manifest_version": 3,
+	"version": "0.1.1",
+	"permissions": [
+		"activeTab",
+		"tabs"
+	],
+	"host_permissions": [
+		"*://*/*"
+	],
+	"action": {
+		"default_popup": "./popup/popup.html",
+		"default_icon": "./static/Hisify.png"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"<all_urls>"
+			],
+			"js": [
+				"./public/content.js"
+			],
+			"css": []
+		}
+	],
+	"background": {
+		"service_worker": "./public/background.js"
+	},
+	"web_accessible_resources": [
+		{
+			"resources": [],
+			"matches": [
+				"<all_urls>"
+			]
+		}
+	],
+	"icons": {
+		"48": "static/Hisify.png"
+	},
+	"content_security_policy": {
+		"script-src": "self",
+		"default-src": "self",
+		"object-src": "self"
+	}
+}
