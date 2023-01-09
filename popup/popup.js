@@ -7,15 +7,34 @@ const OOLET_COLLECT_URL = "https://oolet-shoot.web.app/collect"
 
 // popup.html load listener
 window.addEventListener('load', function () {
-	getAllTabsBtn = document.querySelector("#btnBox")
-	listShootEle = document.querySelector("#listShoot")
+	histoBtn = document.querySelector("#histBtn")
+	donationBtn = document.querySelector("#donationBtn")
 
-	getAllTabsBtn.addEventListener('click', (e) => {
-		toggleCreateBox({});
+	formSubmitBtn = document.querySelector('.submitStyle')
+
+	histoBtn.addEventListener('click', (e) => {
+		toggleGetAllTabs();
 	})
-	listShootEle.addEventListener('click', (e) => {
+	donationBtn.addEventListener('click', (e) => {
 		toggleListingShoot({});
 	})
+	formSubmitBtn.addEventListener('click', (e) => {
+		formItem = document.querySelector('#newItem')
+		itemPanel = document.querySelector("#itemPanelWrapper")
+		const itemValue = formItem.value
+		// Add items
+		if (itemValue != "") {
+			item = document.createElement('div')
+			item.className = "item-style"
+			item.textContent = itemValue
+			itemPanel.append(item)
+			//store
+			// chrome.storage.local.set({ "item": itemValue }).then(() => {
+			// 	console.log("Value is set to ");
+			// });
+		}
+	})
+
 })
 
 // document.addEventListener("DOMContentLoaded", () => {
@@ -23,11 +42,11 @@ window.addEventListener('load', function () {
 // })
 
 // Handler to background
-function toggleCreateBox() {
+function toggleGetAllTabs() {
 	chrome.runtime.sendMessage({
 		type: "GET_ALL_TABS_REQ"
 	}, (response) => {
-		console.log("BG Reponse for GET_ALL_TABS_REQ");
+		console.log("BG Response for GET_ALL_TABS_REQ", response);
 	});
 }
 

@@ -13,8 +13,22 @@ const InjectJSPathList = [
  * @param {type} var - purpose
  * @return {type} var - purpose
  */
+chrome.tabs.onActivated.addListener(function (tabs) {
+	console.log("Add new tabs", tabs.title)
+})
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
 	switch (request.type) {
+		case "GET_ALL_TABS_REQ":
+			chrome.tabs.query({}, function (tabs) {
+				tabsList = []
+				for (var i = 0; i < tabs.length; i += 1) {
+					tabsList.push(tabs[i].title)
+				}
+				sendResponse({ tabsList: tabsList })
+			})
+			break;
 		case "FROM_CONTENT_SCREENSHOT":
 			var image_url = "None";
 			chrome.tabs.captureVisibleTab(

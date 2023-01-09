@@ -138,9 +138,10 @@
     background:rgb(249, 204, 204);
 }
 
-.formStyle #new-item{
+.formStyle #newItem{
     width: 60%;
 }
+
 .submitStyle{
     background:rgb(211, 245, 237);
     padding: 3px;
