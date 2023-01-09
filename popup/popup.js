@@ -9,8 +9,9 @@ const OOLET_COLLECT_URL = "https://oolet-shoot.web.app/collect"
 window.addEventListener('load', function () {
 	histoBtn = document.querySelector("#histBtn")
 	donationBtn = document.querySelector("#donationBtn")
-
+	itemPanel = document.querySelector("#itemPanelWrapper")
 	formSubmitBtn = document.querySelector('.submitStyle')
+	formItem = document.querySelector('#newItem')
 
 	histoBtn.addEventListener('click', (e) => {
 		toggleGetAllTabs();
@@ -18,25 +19,86 @@ window.addEventListener('load', function () {
 	donationBtn.addEventListener('click', (e) => {
 		toggleListingShoot({});
 	})
+
+	// register item from storage
+	StorageGetAllItems().then((storageList) => {
+		console.log(storageList)
+		storageList.forEach(itemValue => {
+			itemPanel.append(createItem(itemValue))
+		})
+	})
+
 	formSubmitBtn.addEventListener('click', (e) => {
-		formItem = document.querySelector('#newItem')
-		itemPanel = document.querySelector("#itemPanelWrapper")
 		const itemValue = formItem.value
 		// Add items
 		if (itemValue != "") {
-			item = document.createElement('div')
-			item.className = "item-style"
-			item.textContent = itemValue
-			itemPanel.append(item)
-			//store
-			// chrome.storage.local.set({ "item": itemValue }).then(() => {
-			// 	console.log("Value is set to ");
-			// });
+			storageNewItem(itemValue)
+			itemPanel.append(createItem(itemValue))
 		}
 	})
 
-})
+	// chrome.storage.sync.clear(function () {
+	// 	defaultItemList = ['READING', 'WRITE NOTE', 'NONE']
+	// 	//create default item
+	// 	defaultItemList.forEach(itemValue => {
+	// 		storageNewItem(itemValue)
+	// 		itemPanel.append(createItem(itemValue))
+	// 	})
+	// });
 
+})
+function createItem(itemName) {
+	var item = document.createElement('div')
+	item.className = "item-style"
+	item.textContent = itemName
+
+	var delIcon = document.createElement('div')
+	delIcon.className = "del-style"
+	delIcon.textContent = 'X'
+
+	item.addEventListener('mouseenter', (e) => {
+		delIcon.style.visibility = "visible"
+	})
+	item.addEventListener('mouseleave', (e) => {
+		delIcon.style.visibility = "hidden"
+	})
+	delIcon.addEventListener('click', (e) => {
+		chrome.storage.sync.get("items", function (storage) {
+			var itemStorageList = []
+			if (storage.items != undefined)
+				itemStorageList = storage.items
+			itemStorageList = itemStorageList.filter(item => item != itemName)
+			chrome.storage.sync.set({ "items": itemStorageList }, function () { });
+		});
+
+		item.remove()
+	})
+	item.append(delIcon)
+	return item
+}
+
+function StorageGetAllItems(resolve, reject) {
+	return new Promise((resolve, reject) => {
+		var itemStorageList = []
+
+		chrome.storage.sync.get("items", function (storage) {
+			if (storage.items != undefined)
+				itemStorageList = storage.items
+			resolve(itemStorageList)
+		});
+	})
+}
+
+function storageNewItem(itemValue) {
+	var itemStorageList = []
+	chrome.storage.sync.get("items", function (storage) {
+		if (storage.items != undefined)
+			itemStorageList = storage.items
+
+		itemStorageList.push(itemValue)
+		chrome.storage.sync.set({ "items": itemStorageList }, function () { });
+	});
+}
 // document.addEventListener("DOMContentLoaded", () => {
 // 	toggleCreateBox({ active: 1 });
 // })

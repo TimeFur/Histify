@@ -23,7 +23,8 @@ const init = () => {
 	selectContent = document.createTextNode("Select classify")
 	classifyWrapper.appendChild(selectContent)
 
-	classifyWrapper.style.position = "absolute"
+	classifyWrapper.style.background = "white"
+	classifyWrapper.style.position = "fixed"
 	classifyWrapper.style.top = "1rem"
 	classifyWrapper.style.right = "1rem"
 	classifyWrapper.style.zIndex = "99999"
