@@ -13,9 +13,19 @@ const InjectJSPathList = [
  * @param {type} var - purpose
  * @return {type} var - purpose
  */
-chrome.tabs.onActivated.addListener(function (tabs) {
-	console.log("Add new tabs", tabs.title)
-})
+//focus tabs
+// chrome.tabs.onActivated.addListener(function (tabs) {
+// 	console.log("onActivated", tabs)
+// })
+// chrome.tabs.onActivatChanged.addListener(function (tabs) {
+// 	console.log("onActivatChanged", tabs)
+// })
+// chrome.tabs.onUpdated.addListener(function (tabs) {
+// 	console.log("onUpdated", tabs)
+// })
+// chrome.tabs.onHighlightChanged.addListener(function (tabs) {
+// 	console.log("onHighlightChanged", tabs)
+// })
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
@@ -31,6 +41,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			break;
 		case "FROM_CONTENT_ITEM_CORRESPONSE_URL":
 			console.log(request.data)
+			sendResponse({ farewell: "ok" })
+			break;
+		case "FROM_CONTENT_ITEM_UNLOAD":
+			console.log("unload", request.data)
 			sendResponse({ farewell: "ok" })
 			break;
 		case "FROM_CONTENT_SCREENSHOT":

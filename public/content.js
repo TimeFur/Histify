@@ -7,7 +7,15 @@ const KEY_CODE_SCREENSHOOT = 79
 const KEY_CODE_TOGGLEBOX = 84
 // disalbe all logging
 // console.log = function () { }
-
+var ItemInfo = {
+	itemName: "",
+	url: "",
+	urlHistory: [],
+	startTime: "",
+	endTime: "",
+	hiddenList: [],
+	visibleList: [],
+}
 /***********************************************************************************
  * 				Append ShootPanel into website
  * 		- After load done, init multiple listeners and create Oolet Box
@@ -15,16 +23,21 @@ const KEY_CODE_TOGGLEBOX = 84
 window.addEventListener('load', function (e) {
 	init()
 })
+window.addEventListener('beforeunload', function (e) {
+	if (ItemInfo.itemName != "") {
+		ItemInfo.endTime = new Date(Date.now());
+		chrome.runtime.sendMessage({ type: "FROM_CONTENT_ITEM_UNLOAD", data: ItemInfo });
+	}
+})
 
 const init = () => {
 	//mount prop
 	IL_CommProp["SEND_ITEM_CORRESPONSE_URL"] = ({ itemName, url }) => {
-		chrome.runtime.sendMessage(
-			{
-				type: "FROM_CONTENT_ITEM_CORRESPONSE_URL",
-				data: { itemName, url }
-			},
-			function (response) { console.log("Send success", itemName, url) });
+		ItemInfo.startTime = new Date(Date.now());
+		ItemInfo.itemName = itemName
+		ItemInfo.url = url
+
+		console.log("Create new item", ItemInfo)
 	}
 
 	//ask item list
@@ -33,9 +46,27 @@ const init = () => {
 		function (response) {
 			IL_Interface['createLayout'](response.items)
 		});
+
+	//listener
+	document.addEventListener("visibilitychange", () => { TabVisiblefunc(document.hidden) })
+	var currentUrl = window.location.href
+	setInterval(() => {
+		if (location.href !== currentUrl) {
+			currentUrl = location.href;
+			ItemInfo.urlHistory.push(currentUrl)
+			console.log("update ---------->", currentUrl)
+		}
+	}, 1000);
 }
 
-
+function TabVisiblefunc(hidden) {
+	var time = new Date(Date.now())
+	if (hidden) {
+		ItemInfo.hiddenList.push(time)
+	} else {
+		ItemInfo.visibleList.push(time)
+	}
+}
 /***********************************************************************************
  * 				Get message from website
  * 		- runtime onMessage listener
