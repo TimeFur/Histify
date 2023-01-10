@@ -24,5 +24,14 @@
     color:black;
     justify-content: center;
     align-items: center;
+    background:rgb(92, 91, 91);
+    cursor:pointer;
+}
+
+.hisify-item-style:hover{
+    color:rgb(241, 62, 62);
+}
+
+.hisify-item-focus-style{
     background:rgb(241, 176, 176);
 }

@@ -29,6 +29,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 				sendResponse({ tabsList: tabsList })
 			})
 			break;
+		case "FROM_CONTENT_ITEM_CORRESPONSE_URL":
+			console.log(request.data)
+			sendResponse({ farewell: "ok" })
+			break;
 		case "FROM_CONTENT_SCREENSHOT":
 			var image_url = "None";
 			chrome.tabs.captureVisibleTab(

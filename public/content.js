@@ -17,12 +17,21 @@ window.addEventListener('load', function (e) {
 })
 
 const init = () => {
+	//mount prop
+	IL_CommProp["SEND_ITEM_CORRESPONSE_URL"] = ({ itemName, url }) => {
+		chrome.runtime.sendMessage(
+			{
+				type: "FROM_CONTENT_ITEM_CORRESPONSE_URL",
+				data: { itemName, url }
+			},
+			function (response) { console.log("Send success", itemName, url) });
+	}
+
 	//ask item list
 	chrome.runtime.sendMessage(
 		{ type: "FROM_CONTENT_ASK_ITEM_LIST" },
 		function (response) {
-			CreateSelectItemsLayout(response.items)
-			GetCurrentInfo()
+			IL_Interface['createLayout'](response.items)
 		});
 }
 
@@ -161,3 +170,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 /***********************************************************************************
  * 				Content function and callback function
  ***********************************************************************************/
+
