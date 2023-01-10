@@ -21,9 +21,12 @@
 				"<all_urls>"
 			],
 			"js": [
-				"./public/content.js"
+				"./public/content.js",
+				"./public/app/ItemLayout.js"
 			],
-			"css": []
+			"css": [
+				"./public/app/ItemLayout.css"
+			]
 		}
 	],
 	"background": {

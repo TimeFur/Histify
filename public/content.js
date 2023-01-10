@@ -13,31 +13,20 @@ const KEY_CODE_TOGGLEBOX = 84
  * 		- After load done, init multiple listeners and create Oolet Box
  ***********************************************************************************/
 window.addEventListener('load', function (e) {
-	console.log("Hisify Load")
 	init()
 })
 
 const init = () => {
-	//create classify element
-	classifyWrapper = document.createElement('div')
-	selectContent = document.createTextNode("Select classify")
-	classifyWrapper.appendChild(selectContent)
-
-	classifyWrapper.style.background = "white"
-	classifyWrapper.style.position = "fixed"
-	classifyWrapper.style.top = "1rem"
-	classifyWrapper.style.right = "1rem"
-	classifyWrapper.style.zIndex = "99999"
-
-	document = document.querySelector("body")
-	document.body.appendChild(classifyWrapper)
-
-	console.log(document)
-
-	setTimeout(() => {
-		// classifyWrapper.style.visibility = "hidden";
-	}, 1000);
+	//ask item list
+	chrome.runtime.sendMessage(
+		{ type: "FROM_CONTENT_ASK_ITEM_LIST" },
+		function (response) {
+			CreateSelectItemsLayout(response.items)
+			GetCurrentInfo()
+		});
 }
+
+
 /***********************************************************************************
  * 				Get message from website
  * 		- runtime onMessage listener

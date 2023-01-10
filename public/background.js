@@ -40,7 +40,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 				}
 			);
 			break;
-
+		case "FROM_CONTENT_ASK_ITEM_LIST":
+			chrome.storage.sync.get("items", function (storage) {
+				var itemStorageList = []
+				if (storage.items != undefined)
+					itemStorageList = storage.items
+				sendResponse({ items: itemStorageList });
+			});
+			break;
 		case "SEND_CREATEBOX_REQ":
 			chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 				const tabId = tabs[0].id
