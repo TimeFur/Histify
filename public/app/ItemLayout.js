@@ -5,7 +5,8 @@ var IL_CommProp = {
     "SEND_ITEM_CORRESPONSE_URL": ({ focusItem, url }) => { }
 }
 var IL_Interface = {
-    "createLayout": createSelectItemsLayout
+    "createLayout": createSelectItemsLayout,
+    "showlayout": showItemLayout
 }
 /*********************************************
  *              Global Resource
@@ -84,4 +85,10 @@ function step(timestamp) {
 
         ClassifyWrapper.style.visibility = "hidden";
     }
+}
+
+function showItemLayout() {
+    ClassifyWrapper.style.visibility = "visible";
+    StartTimeStamp = 0;
+    window.requestAnimationFrame(step);
 }

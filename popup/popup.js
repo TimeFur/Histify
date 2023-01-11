@@ -46,6 +46,8 @@ window.addEventListener('load', function () {
 	// 	})
 	// });
 
+	//toggle show up item content layout
+	chrome.runtime.sendMessage({ type: "FROM_POP_SHOW_UP_ITEM_LAYOUT" }, (response) => { });
 })
 function createItem(itemName) {
 	var item = document.createElement('div')

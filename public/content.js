@@ -158,6 +158,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	};
 
 	switch (request.type) {
+		case "HISIFY_SHOW_UP_ITEM_LAYOUT":
+			IL_Interface['showlayout']()
+			break;
 		case "SEND_CREATEBOX_TO_CONTENT_REQ":
 			BoxObject.toggleVisible({ active: request.active })
 			sendResponse("CONTENT RESPONSE TO BG: toggle boix");
