@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./HistoStyle.css">
+    <!-- font style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap" rel="stylesheet">
+
+    <title>Hisify</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- <h1 class="titleStyle">
+            Hisify
+        </h1> -->
+        <div class="control-wrapper">
+            <div class="btn-control-wrapper">
+                <input type="button" id="histBtn" class="histBtnStyle" name="box" value="Histo">
+                <input type="button" id="donationBtn" class="donationBtnStyle" name="box" value="Donation">
+            </div>
+            <div class="item-panel-wrapper" id="itemPanelWrapper">
+                <!-- <div class="item-style">
+                    <div class="del-style">X</div>
+                    READING
+                </div> -->
+            </div>
+            <form class="formStyle">
+                <label for="new_item">New Item:</label>
+                <input type="text" name="new_item" id="newItem"></input>
+                <input type="button" class="submitStyle" value="Add">
+            </form>
+
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

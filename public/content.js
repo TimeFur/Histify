@@ -3,19 +3,15 @@ const SCREEN_SHOT_KEY = "SCREEN_SHOT_KEY"
 const HOVER_EVENT_KEY = "HOVER_EVENT_KEY"
 const IMG_SEARCH_EVENT_KEY = "IMG_SEARCH_EVENT_KEY"
 
-const KEY_CODE_SCREENSHOOT = 79
-const KEY_CODE_TOGGLEBOX = 84
 // disalbe all logging
 // console.log = function () { }
-var ItemInfo = {
-	itemName: "",
-	url: "",
-	urlHistory: [],
-	startTime: "",
-	endTime: "",
+var histoInfo = {
+	itemList: [],
 	hiddenList: [],
 	visibleList: [],
-}
+};
+var HistoDict = {};
+var CurrentUrl = null;
 /***********************************************************************************
  * 				Append ShootPanel into website
  * 		- After load done, init multiple listeners and create Oolet Box
@@ -24,20 +20,19 @@ window.addEventListener('load', function (e) {
 	init()
 })
 window.addEventListener('beforeunload', function (e) {
-	if (ItemInfo.itemName != "") {
-		ItemInfo.endTime = new Date(Date.now());
-		chrome.runtime.sendMessage({ type: "FROM_CONTENT_ITEM_UNLOAD", data: ItemInfo });
+	if (HistoDict != {}) {
+		var time = new Date(Date.now());
+		if (CurrentUrl in HistoDict)
+			HistoDict[CurrentUrl].hiddenList.push(time);
+		chrome.runtime.sendMessage({ type: "FROM_CONTENT_ITEM_UNLOAD", data: HistoDict });
 	}
 })
 
 const init = () => {
 	//mount prop
 	IL_CommProp["SEND_ITEM_CORRESPONSE_URL"] = ({ itemName, url }) => {
-		ItemInfo.startTime = new Date(Date.now());
-		ItemInfo.itemName = itemName
-		ItemInfo.url = url
-
-		console.log("Create new item", ItemInfo)
+		if (CurrentUrl in HistoDict)
+			HistoDict[CurrentUrl].itemList.push({ 'item': itemName, 'time': new Date(Date.now()) });
 	}
 
 	//ask item list
@@ -49,22 +44,30 @@ const init = () => {
 
 	//listener
 	document.addEventListener("visibilitychange", () => { TabVisiblefunc(document.hidden) })
-	var currentUrl = window.location.href
+
 	setInterval(() => {
-		if (location.href !== currentUrl) {
-			currentUrl = location.href;
-			ItemInfo.urlHistory.push(currentUrl)
-			console.log("update ---------->", currentUrl)
+		var time = new Date(Date.now())
+		if (location.href !== CurrentUrl) {
+			if (CurrentUrl != null && CurrentUrl in HistoDict)
+				HistoDict[CurrentUrl].hiddenList.push(time)
+
+			CurrentUrl = location.href;
+
+			//create histo data
+			if ((CurrentUrl in HistoDict) == false)
+				HistoDict[CurrentUrl] = { ...histoInfo }
+			HistoDict[CurrentUrl].visibleList.push(time)
 		}
 	}, 1000);
 }
 
 function TabVisiblefunc(hidden) {
 	var time = new Date(Date.now())
-	if (hidden) {
-		ItemInfo.hiddenList.push(time)
-	} else {
-		ItemInfo.visibleList.push(time)
+	if (CurrentUrl in HistoDict) {
+		if (hidden)
+			HistoDict[CurrentUrl].hiddenList.push(time);
+		else
+			HistoDict[CurrentUrl].visibleList.push(time);
 	}
 }
 /***********************************************************************************

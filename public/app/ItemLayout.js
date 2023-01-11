@@ -56,7 +56,6 @@ function createSelectItemsLayout(itemsList) {
         var itemName = focusItem.textContent
         classifyWrapper.style.visibility = "hidden";
         //sendback to background [through content api]
-        console.log(itemName, url)
 
         IL_CommProp["SEND_ITEM_CORRESPONSE_URL"]({ itemName, url })
     }, 3000);

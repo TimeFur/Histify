@@ -36,6 +36,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 				for (var i = 0; i < tabs.length; i += 1) {
 					tabsList.push(tabs[i].title)
 				}
+				//open histo page
+				// chrome.tabs.create({ url: 'Histo.html' });
+				chrome.tabs.create({ url: './public/local/Histo.html' });
 				sendResponse({ tabsList: tabsList })
 			})
 			break;
