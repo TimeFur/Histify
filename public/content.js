@@ -17,6 +17,7 @@ var CurrentUrl = null;
  * 		- After load done, init multiple listeners and create Oolet Box
  ***********************************************************************************/
 window.addEventListener('load', function (e) {
+	console.log("Content script load...")
 	init()
 })
 window.addEventListener('beforeunload', function (e) {
@@ -85,15 +86,24 @@ function mountPropFunc() {
 window.addEventListener('message', function (event) {
 	// We only accept messages from ourselves
 	// when its postmessage itself would receive the same request msg
-
+	// console.log("Get message", event.source.location, event)
 	if (event.source != window) {
 		console.log("Source not equal window")
 		return;
 	}
 
-	switch (event.data.type) {
+	switch (event.data.cmd) {
+		case "FROM_HISTO_PAGE_REQUEST":
+			chrome.runtime.sendMessage({
+				type: "FROM_CONTENT_OPEN_HISTOIFY_PAGE_REQ"
+			}, (response) => {
+				// console.log("BG Response for GET_ALL_TABS_REQ", response);
+				window.postMessage({ cmd: "FROM_CONTENT_GET_HIST_INFO", data: response }, "*")
+			});
+			// 
+			break;
 		default:
-			console.log('Website received Default');
+			// console.log('Website received Default');
 			break;
 	}
 }, false);

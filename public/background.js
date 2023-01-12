@@ -11,16 +11,23 @@ const InjectJSPathList = [
  */
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 	switch (request.type) {
+		case "FROM_CONTENT_OPEN_HISTOIFY_PAGE_REQ":
 		case "FROM_POP_OPEN_HISTOIFY_PAGE_REQ":
 			chrome.tabs.query({}, function (tabs) {
+				var tabsList = []
+				// for (var i = 0; i < tabs.length; i += 1)
+				// 	tabsList.push(tabs[i].title)
 				var length = tabs.length
 				for (var i = 0; i < length; i += 1) {
 					let title = tabs[i].title
 					let createLocalPageFlag = (i == length - 1)
+					// console.log(tabs[i].id)
 					chrome.tabs.sendMessage(tabs[i].id, { type: "GET_HISTODICT_DATA" }, function (response) {
-						console.log(title, response)
+						// console.log(title, response)
 						if (createLocalPageFlag) {
-							chrome.tabs.create({ url: LOCAL_HISITOFY_PATH });
+							console.log("Send")
+							if (request.type == "FROM_POP_OPEN_HISTOIFY_PAGE_REQ")
+								chrome.tabs.create({ url: LOCAL_HISITOFY_PATH });
 							sendResponse({ tabsList: tabsList })
 						}
 					})
@@ -29,6 +36,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 			break;
 		case "FROM_POP_SHOW_UP_ITEM_LAYOUT":
 			chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+				console.log(tabs[0].id)
 				chrome.tabs.sendMessage(tabs[0].id,
 					{ type: "HISIFY_SHOW_UP_ITEM_LAYOUT", data: request.data },
 					function (response) {

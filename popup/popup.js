@@ -10,6 +10,8 @@ window.addEventListener('load', function () {
 	formSubmitBtn = document.querySelector('.submitStyle')
 	formItem = document.querySelector('#newItem')
 
+
+	console.log(location)
 	histoBtn.addEventListener('click', (e) => {
 		toggleHistofyPage();
 	})
