@@ -2,7 +2,8 @@
  *        ItemLayout prop and interface
  *********************************************/
 var IL_CommProp = {
-    "SEND_ITEM_CORRESPONSE_URL": ({ focusItem, url }) => { }
+    "SEND_ITEM_CORRESPONSE_URL": ({ focusItem, url }) => { },
+    "SEND_FOCUS_ITEM": ({ focusItemName }) => { }
 }
 var IL_Interface = {
     "createLayout": createSelectItemsLayout,
@@ -20,7 +21,7 @@ var ElapseTime = 1800
 /*********************************************
  *                  Method
  *********************************************/
-function createSelectItemsLayout(itemsList) {
+function createSelectItemsLayout(itemsList, focusItemName = null) {
     ClassifyWrapper = document.createElement('div')
 
     //create child element
@@ -39,6 +40,17 @@ function createSelectItemsLayout(itemsList) {
 
     //create item element and append to itemWrapper
     createItemElement(itemsList)
+
+    if (focusItemName != null && itemsList.includes(focusItemName)) {
+        itemWrapper.childNodes.forEach(item => {
+            if (item.textContent == focusItemName)
+                FocusItem = item
+        })
+        FocusItem.classList.add("hisify-item-focus-style")
+    } else if (FocusItem == null) {
+        FocusItem = itemWrapper.firstChild;
+        FocusItem.classList.add("hisify-item-focus-style")
+    }
 
     //apend to website
     document = document.querySelector("body")
@@ -76,18 +88,13 @@ function createItemElement(itemsList = []) {
         item.textContent = itemName
         itemWrapper.appendChild(item)
 
-        if (FocusItem == null) {
-            FocusItem = item;
-            FocusItem.classList.add("hisify-item-focus-style")
-        }
-
         //add listener
         item.addEventListener('click', (e) => {
             if (FocusItem != null)
                 FocusItem.classList.remove("hisify-item-focus-style")
             FocusItem = item;
             FocusItem.classList.add("hisify-item-focus-style")
-
+            IL_CommProp["SEND_FOCUS_ITEM"]({ focusItemName: item.textContent })
             //clear time
             StartTimeStamp = 0;
         })

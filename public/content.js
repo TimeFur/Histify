@@ -29,17 +29,13 @@ window.addEventListener('beforeunload', function (e) {
 })
 
 const init = () => {
-	//mount prop
-	IL_CommProp["SEND_ITEM_CORRESPONSE_URL"] = ({ itemName, url }) => {
-		if (CurrentUrl in HistoDict)
-			HistoDict[CurrentUrl].itemList.push({ 'item': itemName, 'time': new Date(Date.now()) });
-	}
+	mountPropFunc()
 
 	//ask item list
 	chrome.runtime.sendMessage(
 		{ type: "FROM_CONTENT_ASK_ITEM_LIST" },
 		function (response) {
-			IL_Interface['createLayout'](response.items)
+			IL_Interface['createLayout'](response.items, response.focusItemName)
 		});
 
 	//listener
@@ -68,6 +64,17 @@ function TabVisiblefunc(hidden) {
 			HistoDict[CurrentUrl].hiddenList.push(time);
 		else
 			HistoDict[CurrentUrl].visibleList.push(time);
+	}
+}
+
+function mountPropFunc() {
+	//mount ItemLayout script prop
+	IL_CommProp["SEND_ITEM_CORRESPONSE_URL"] = ({ itemName, url }) => {
+		if (CurrentUrl in HistoDict)
+			HistoDict[CurrentUrl].itemList.push({ 'item': itemName, 'time': new Date(Date.now()) });
+	}
+	IL_CommProp["SEND_FOCUS_ITEM"] = ({ focusItemName }) => {
+		chrome.runtime.sendMessage({ type: "FROM_CONTENT_SET_FOCUS_ITEM", data: focusItemName });
 	}
 }
 /***********************************************************************************
