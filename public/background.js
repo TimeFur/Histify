@@ -1,11 +1,11 @@
 //https://stackoverflow.com/questions/18794407/chrome-extension-api-chrome-tabs-capturevisibletab-on-background-page-to-conten
 var ActiveTabList = [];
 var ImageBuffer = [];
+const LOCAL_HISITOFY_PATH = "./public/local/Histo.html"
 const IMG_SEARCH_URL = "https://oolet-shoot.web.app/search"
 // console.log = function () { }
 const InjectJSPathList = [
 	// "./public/content.js",
-
 ]
 
 /**
@@ -13,38 +13,29 @@ const InjectJSPathList = [
  * @param {type} var - purpose
  * @return {type} var - purpose
  */
-//focus tabs
-// chrome.tabs.onActivated.addListener(function (tabs) {
-// 	console.log("onActivated", tabs)
-// })
-// chrome.tabs.onActivatChanged.addListener(function (tabs) {
-// 	console.log("onActivatChanged", tabs)
-// })
-// chrome.tabs.onUpdated.addListener(function (tabs) {
-// 	console.log("onUpdated", tabs)
-// })
-// chrome.tabs.onHighlightChanged.addListener(function (tabs) {
-// 	console.log("onHighlightChanged", tabs)
-// })
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 	switch (request.type) {
-		case "GET_ALL_TABS_REQ":
+		case "FROM_POP_OPEN_HISTOIFY_PAGE_REQ":
 			chrome.tabs.query({}, function (tabs) {
-				tabsList = []
-				for (var i = 0; i < tabs.length; i += 1) {
-					tabsList.push(tabs[i].title)
+				var length = tabs.length
+				for (var i = 0; i < length; i += 1) {
+					let title = tabs[i].title
+					let createLocalPageFlag = (i == length - 1)
+					chrome.tabs.sendMessage(tabs[i].id, { type: "GET_HISTODICT_DATA" }, function (response) {
+						console.log(title, response)
+						if (createLocalPageFlag) {
+							chrome.tabs.create({ url: LOCAL_HISITOFY_PATH });
+							sendResponse({ tabsList: tabsList })
+						}
+					})
 				}
-				//open histo page
-				// chrome.tabs.create({ url: 'Histo.html' });
-				chrome.tabs.create({ url: './public/local/Histo.html' });
-				sendResponse({ tabsList: tabsList })
 			})
 			break;
 		case "FROM_POP_SHOW_UP_ITEM_LAYOUT":
 			chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-				chrome.tabs.sendMessage(tabs[0].id, { type: "HISIFY_SHOW_UP_ITEM_LAYOUT" },
+				chrome.tabs.sendMessage(tabs[0].id,
+					{ type: "HISIFY_SHOW_UP_ITEM_LAYOUT", data: request.data },
 					function (response) {
 						if (response)
 							sendResponse({ farewell: "ok" })
@@ -89,26 +80,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 						sendResponse("Inject")
 					}
 				});
-			});
-			break;
-		case "SEND_TUNEBOXWIDTH_REQ":
-
-			chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-				chrome.tabs.sendMessage(tabs[0].id, { type: "SEND_TUNEBOXWIDTH_TO_CONTENT_REQ", value: request.value }, function (response) {
-					sendResponse({ farewell: "ok" })
-				});
-			});
-			break;
-		case "FROM_CONTENT_GET_TAB_ID":
-			chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-				ActiveTabList.push(tabs[0].id);
-				sendResponse({ tabId: tabs[0].id, activeTabList: ActiveTabList, farewell: "ok" })
-			});
-
-			break;
-		case "CLOSE_TAB_EVT":
-			chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-				ActiveTabList = ActiveTabList.filter(id => id != tabs[0].id)
 			});
 			break;
 		case "SEND_LIST_ALL":

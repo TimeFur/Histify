@@ -6,7 +6,8 @@ var IL_CommProp = {
 }
 var IL_Interface = {
     "createLayout": createSelectItemsLayout,
-    "showlayout": showItemLayout
+    "showlayout": showItemLayout,
+    "updateItemList": []
 }
 /*********************************************
  *              Global Resource
@@ -24,30 +25,9 @@ function createSelectItemsLayout(itemsList) {
 
     //create child element
     var itemWrapper = document.createElement('div')
+    itemWrapper.id = "itemWrapper"
     var timeBar = document.createElement('div')
 
-    itemsList.forEach(itemName => {
-        var item = document.createElement('div')
-        item.className = "hisify-item-style"
-        item.textContent = itemName
-        itemWrapper.appendChild(item)
-
-        if (FocusItem == null) {
-            FocusItem = item;
-            FocusItem.classList.add("hisify-item-focus-style")
-        }
-
-        //add listener
-        item.addEventListener('click', (e) => {
-            if (FocusItem != null)
-                FocusItem.classList.remove("hisify-item-focus-style")
-            FocusItem = item;
-            FocusItem.classList.add("hisify-item-focus-style")
-
-            //clear time
-            StartTimeStamp = 0;
-        })
-    })
     //create classify element
     timeBar.style.background = "#FF472E"
     timeBar.style.width = "100%";
@@ -57,7 +37,9 @@ function createSelectItemsLayout(itemsList) {
     ClassifyWrapper.appendChild(itemWrapper)
     ClassifyWrapper.appendChild(timeBar)
 
-    console.log(ClassifyWrapper.querySelector("#timeBar"))
+    //create item element and append to itemWrapper
+    createItemElement(itemsList)
+
     //apend to website
     document = document.querySelector("body")
     document.body.appendChild(ClassifyWrapper)
@@ -86,8 +68,45 @@ function step(timestamp) {
         ClassifyWrapper.style.visibility = "hidden";
     }
 }
+function createItemElement(itemsList = []) {
+    var itemWrapper = ClassifyWrapper.querySelector('#itemWrapper')
+    itemsList.forEach(itemName => {
+        var item = document.createElement('div')
+        item.className = "hisify-item-style"
+        item.textContent = itemName
+        itemWrapper.appendChild(item)
 
-function showItemLayout() {
+        if (FocusItem == null) {
+            FocusItem = item;
+            FocusItem.classList.add("hisify-item-focus-style")
+        }
+
+        //add listener
+        item.addEventListener('click', (e) => {
+            if (FocusItem != null)
+                FocusItem.classList.remove("hisify-item-focus-style")
+            FocusItem = item;
+            FocusItem.classList.add("hisify-item-focus-style")
+
+            //clear time
+            StartTimeStamp = 0;
+        })
+    })
+}
+function showItemLayout(itemsList) {
+    //update itemList add or remove
+    var itemWrapper = ClassifyWrapper.querySelector('#itemWrapper')
+    var itemList = itemsList
+
+    itemWrapper.childNodes.forEach(item => {
+        if (itemList.includes(item.textContent) == false) {
+            item.remove()
+        } else {
+            itemList = itemList.filter((i) => i != item.textContent)
+        }
+    })
+    createItemElement(itemList)
+
     ClassifyWrapper.style.visibility = "visible";
     StartTimeStamp = 0;
     window.requestAnimationFrame(step);
