@@ -15,19 +15,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 		case "FROM_POP_OPEN_HISTOIFY_PAGE_REQ":
 			chrome.tabs.query({}, function (tabs) {
 				var tabsList = []
-				// for (var i = 0; i < tabs.length; i += 1)
-				// 	tabsList.push(tabs[i].title)
 				var length = tabs.length
+
 				for (var i = 0; i < length; i += 1) {
 					let title = tabs[i].title
 					let createLocalPageFlag = (i == length - 1)
-					// console.log(tabs[i].id)
 					chrome.tabs.sendMessage(tabs[i].id, { type: "GET_HISTODICT_DATA" }, function (response) {
 						// console.log(title, response)
+						tabsList.push({ title, histifyInfo: response })
 						if (createLocalPageFlag) {
-							console.log("Send")
-							if (request.type == "FROM_POP_OPEN_HISTOIFY_PAGE_REQ")
+							//storage tabs information
+							if (request.type == "FROM_POP_OPEN_HISTOIFY_PAGE_REQ") {
+								chrome.storage.sync.set({ "HistifyInfo": tabsList }, function () { });
 								chrome.tabs.create({ url: LOCAL_HISITOFY_PATH });
+							}
+
 							sendResponse({ tabsList: tabsList })
 						}
 					})
@@ -118,6 +120,12 @@ function sendMsgWrapper(tabId, title, item) {
 			else
 				resolve({})
 		})
+	})
+}
+
+function sendMessageToTab(tabId, message) {
+	return new Promise((resolve) => {
+		chrome.tabs.sendMessage(tabId, message, resolve)
 	})
 }
 
