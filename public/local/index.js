@@ -8,7 +8,7 @@ window.addEventListener("load", (e) => {
     //create layout UI
     loadPage("./graphic/todo_sample.html", "#graphId")
 
-    createChartSample()
+    // createChartSample()
     //Register button event
     var HistInfobtn = document.querySelector("#getHistInfoBtn")
     HistInfobtn.addEventListener('click', (e) => {
@@ -46,10 +46,16 @@ window.addEventListener('message', (event) => {
 function loadPage(path, targetId) {
     var target = document.querySelector(targetId)
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET', path, false);
+    xmlhttp.open('GET', path, true);
     xmlhttp.send();
 
-    target.innerHTML = xmlhttp.responseText
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+            target.innerHTML = xmlhttp.responseText
+        }
+    }
+
     return xmlhttp.responseText;
 }
 

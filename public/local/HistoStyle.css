@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 60%;
+    height: 4vh;
 }
 
 .btn-control-wrapper {
@@ -167,4 +167,9 @@
 }
 .submitStyle:hover{
     background:rgb(141, 243, 150);
+}
+
+#graphId{
+    width:100vw;
+    height:96vh;
 }
