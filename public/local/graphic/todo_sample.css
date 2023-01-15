@@ -8,21 +8,25 @@
 
 .top-section-style{
     background:coral;
-    height: 20%;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-around;
+    align-items:center;
+    height: 8%;
 }
 .content-section-style{
     position: relative;
     display: flex;
     justify-content: space-around;
     width: 100%;
-    height: 80%;
+    height: 92%;
 }
 
 .content-left-section-style{
     background:rgb(191, 249, 170);
-    width: 30%;
+    width: 20%;
 }
 .content-right-section-style{
     background:rgb(138, 196, 238);
-    width: 70%;
+    width: 80%;
 }

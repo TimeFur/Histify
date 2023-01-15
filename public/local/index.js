@@ -51,8 +51,8 @@ function loadPage(path, targetId) {
 
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-
             target.innerHTML = xmlhttp.responseText
+            HISTO_INTERFACE.create(document)
         }
     }
 
