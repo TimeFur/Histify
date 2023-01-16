@@ -42,6 +42,7 @@ const leftSection = () => {
     })
 
     //sub-section2 - pie chart
+    createPieChart({})
 
 }
 const createItem = ({ text = "", percent = "10%" }) => {
@@ -64,6 +65,40 @@ const createItem = ({ text = "", percent = "10%" }) => {
     itemEle.append(arrowIcon)
 
     return itemEle;
+}
+
+const createPieChart = ({ itemName = "item", itemData = [300, 50, 100] }) => {
+    const data = {
+        labels: [
+            'Red',
+            'Blue',
+            'Yellow'
+        ],
+        datasets: [{
+            label: itemName,
+            data: itemData,
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+    //action
+    new Chart("pieChart", {
+        type: "pie",
+        data: data,
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right'
+                }
+            },
+            maintainAspectRatio: false,
+        }
+    });
 }
 /************************
  *  Prop and Interface 

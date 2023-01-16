@@ -77,11 +77,14 @@
 }
 
 .item-pie-chart-style{
-    height: 26%;
+    display:flex;
+    justify-content:center;
+    height: 36%;
+    padding:5px;
     background:rgb(247, 181, 88);
 }
 
 .item-note-style{
-    height: 50%;
+    height: 40%;
     background:rgb(231, 134, 134);
 }
