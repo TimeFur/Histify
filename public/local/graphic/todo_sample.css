@@ -85,6 +85,28 @@
 }
 
 .item-note-style{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
     height: 40%;
     background:rgb(231, 134, 134);
+}
+
+.textarea-style{
+    font-family: 'Montserrat', sans-serif;
+    font-size:0.5rem;
+    padding:5px;
+    height:90%;
+    width:90%;
+    background-color:rgb(251, 224, 184);
+    border: 0px;
+    border-radius: 5px;
+    outline: none;
+    box-shadow:0px 0px 4px rgb(243, 230, 230);
+}
+
+.textarea-style::first-line{
+    font-size: 1.2rem;
+    font-weight: bold;
 }
